@@ -11,7 +11,7 @@ import (
 type ListRepository interface {
 	GetList(request helper.Pagination) (pagination helper.Pagination, err error)
 	GetListRelational() (lists []model.List, err error)
-	GetDetailList(Id int) (list model.List, err error)
+	GetDetailList(Id int) (list *model.List, err error)
 	CreateList(list model.List) error
 	UpdateList(list model.List) error
 	DeleteList(Id int) error
@@ -54,13 +54,14 @@ func (r *listRepository) GetListRelational() (lists []model.List, err error) {
 	return
 }
 
-func (r *listRepository) GetDetailList(Id int) (list model.List, err error) {
+func (r *listRepository) GetDetailList(Id int) (*model.List, error) {
 	db := r.db
-	if err = db.Find(&list, Id).Error; err != nil {
+	var list = model.List{}
+	if err := db.Find(&list, Id).Error; err != nil {
 		log.Printf("Error get data detail list with err: %s", err)
-		return
+		return nil, err
 	}
-	return
+	return &list, nil
 }
 
 func (r *listRepository) CreateList(list model.List) error {

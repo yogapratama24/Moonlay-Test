@@ -31,19 +31,28 @@ type ListRequest struct {
 }
 
 type ListCreateRequest struct {
-	Id          int    `json:"id"`
-	Title       string `json:"title" query:"title" validate:"required"`
-	Description string `json:"description" query:"description" validate:"required"`
-	FilePath    string `json:"file_path"`
+	Id          int       `json:"id"`
+	Title       string    `json:"title" query:"title" validate:"required"`
+	Description string    `json:"description" query:"description" validate:"required"`
+	FilePath    string    `json:"file_path"`
+	SubList     []SubList `gorm:"constraint:OnUpdate:CASCADE,OnDelete:CASCADE;" json:"sub_list"`
+	CreatedAt   time.Time `json:"created_at,omitempty"`
+	UpdatedAt   time.Time `json:"updated_at,omitempty"`
 }
 
 type ListUpdateRequest struct {
-	Id          int    `json:"id" query:"id" validate:"required"`
-	Title       string `json:"title" query:"title" validate:"required"`
-	Description string `json:"description" query:"description" validate:"required"`
-	FilePath    string `json:"file" query:"file" gorm:"size:300"`
+	Id          int       `json:"id" query:"id" validate:"required"`
+	Title       string    `json:"title" query:"title" validate:"required"`
+	Description string    `json:"description" query:"description" validate:"required"`
+	FilePath    string    `json:"file" query:"file" gorm:"size:300"`
+	UpdatedAt   time.Time `json:"updated_at,omitempty"`
 }
 
 type ListDeleteRequest struct {
 	Id int `json:"id" param:"id" query:"id" validate:"required"`
+}
+
+type Category struct {
+	Id   string
+	Name string
 }
